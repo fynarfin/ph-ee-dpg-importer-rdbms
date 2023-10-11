@@ -1,0 +1,13 @@
+kafka:
+  brokers: "localhost:9092"
+  consumer-group: ch1
+#  To be used when auth is enabled in kafka
+#  username: "admin"
+#  password: "admin"
+
+
+importer:
+  kafka:
+    topic: conductor
+    reset: true
+    aggreation-window-seconds: 2
