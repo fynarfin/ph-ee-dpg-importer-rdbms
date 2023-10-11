@@ -51,7 +51,7 @@ public class KafkaConfiguration {
         ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
         factory.setConcurrency(3);  // TODO externalize
-        factory.getContainerProperties().setPollTimeout(3000); // TODO externalize
+        factory.getContainerProperties().setPollTimeout(10000); // TODO externalize
 
         return factory;
     }
@@ -83,9 +83,9 @@ public class KafkaConfiguration {
         properties.put(ConsumerConfig.GROUP_ID_CONFIG, hostname);
         properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
+        properties.put("security.protocol", "PLAINTEXT");
 //        properties.put("sasl.jaas.config", "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"admin\" password=\"admin\"");
 //        properties.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-//        properties.put("security.protocol", "SASL_PLAINTEXT");
 
         return properties;
     }

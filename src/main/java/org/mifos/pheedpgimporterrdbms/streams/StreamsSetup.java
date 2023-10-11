@@ -55,7 +55,7 @@ public class StreamsSetup {
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());
 
-        logger.info("********************************************"+ merger.toString());
+        logger.info("********************************************"+ merger.getClass().toString());
 
         streamsBuilder.stream(kafkaTopic, Consumed.with(STRING_SERDE, STRING_SERDE))
                 .groupByKey()
