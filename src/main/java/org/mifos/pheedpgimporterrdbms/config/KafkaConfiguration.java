@@ -1,5 +1,12 @@
 package org.mifos.pheedpgimporterrdbms.config;
 
+import static org.apache.kafka.streams.StreamsConfig.*;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -18,14 +25,6 @@ import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
-import static org.apache.kafka.streams.StreamsConfig.*;
-
 @EnableKafka
 @EnableKafkaStreams
 @Configuration
@@ -36,7 +35,7 @@ public class KafkaConfiguration {
     @Value("${kafka.brokers}")
     private String kafkaBrokers;
 
-    @Value("kafka.consumer-group")
+    @Value("${kafka.consumer-group}")
     private String consumerGroup;
 
     @Value("kafka.username")
@@ -45,12 +44,11 @@ public class KafkaConfiguration {
     @Value("kafka.password")
     private String kafkaPassword;
 
-
     @Bean
     KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, String>> kafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
-        factory.setConcurrency(3);  // TODO externalize
+        factory.setConcurrency(3); // TODO externalize
         factory.getContainerProperties().setPollTimeout(10000); // TODO externalize
 
         return factory;
@@ -63,8 +61,8 @@ public class KafkaConfiguration {
 
     @Bean(name = KafkaStreamsDefaultConfiguration.DEFAULT_STREAMS_CONFIG_BEAN_NAME)
     KafkaStreamsConfiguration kStreamsConfig() {
-        logger.info("kafka Brokers :{}",kafkaBrokers);
-        logger.info("consumer group :{}",consumerGroup);
+        logger.info("kafka Brokers :{}", kafkaBrokers);
+        logger.info("consumer group :{}", consumerGroup);
         Map<String, Object> props = new HashMap<>();
         props.put(APPLICATION_ID_CONFIG, consumerGroup);
         props.put(BOOTSTRAP_SERVERS_CONFIG, kafkaBrokers);
@@ -84,8 +82,9 @@ public class KafkaConfiguration {
         properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         properties.put("security.protocol", "PLAINTEXT");
-//        properties.put("sasl.jaas.config", "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"admin\" password=\"admin\"");
-//        properties.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+        // properties.put("sasl.jaas.config", "org.apache.kafka.common.security.plain.PlainLoginModule required
+        // username=\"admin\" password=\"admin\"");
+        // properties.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
 
         return properties;
     }

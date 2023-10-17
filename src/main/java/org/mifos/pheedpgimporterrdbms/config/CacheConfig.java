@@ -15,6 +15,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 @EnableCaching
 @EnableScheduling
 public class CacheConfig {
+
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Bean
@@ -22,7 +23,7 @@ public class CacheConfig {
         return new ConcurrentMapCacheManager("tenantServerConnection");
     }
 
-    @CacheEvict(allEntries = true, value = {"tenantServerConnection"})
+    @CacheEvict(allEntries = true, value = { "tenantServerConnection" })
     @Scheduled(fixedDelay = 10 * 60 * 1000, initialDelay = 500)
     public void reportCacheEvict() {
         logger.info("Flushing all cached tenantServerConnection entries");
