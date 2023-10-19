@@ -135,6 +135,7 @@ public class RecordParser {
                 transfer.setStatus(TransferStatus.TERMINATED);
             }
             transfer.setStartedAt(new Date(recordDocument.read("$.createTime", Long.class)));
+            transfer.setTransactionId(workflowInstanceKey);
             transferRepository.save(transfer);
         }
         return List.of();
